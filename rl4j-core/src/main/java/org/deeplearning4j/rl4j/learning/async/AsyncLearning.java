@@ -66,8 +66,8 @@ public abstract class AsyncLearning<O extends Encodable, A, AS extends ActionSpa
             getDataManager().writeInfo(this);
             synchronized (this) {
                 while (!isTrainingComplete() && getAsyncGlobal().isRunning()) {
-                    getPolicy().play(getMdp(), getHistoryProcessor());
-                    getDataManager().writeInfo(this);
+//                    getPolicy().play(getMdp(), getHistoryProcessor());
+//                    getDataManager().writeInfo(this);
                     wait(20000);
                 }
             }
