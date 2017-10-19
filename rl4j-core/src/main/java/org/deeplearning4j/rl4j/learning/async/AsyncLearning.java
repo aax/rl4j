@@ -21,6 +21,8 @@ public abstract class AsyncLearning<O extends Encodable, A, AS extends ActionSpa
                 extends Learning<O, A, AS, NN> {
 
 
+    private Thread[] threads;
+
     public AsyncLearning(AsyncConfiguration conf) {
         super(conf);
     }
@@ -41,12 +43,13 @@ public abstract class AsyncLearning<O extends Encodable, A, AS extends ActionSpa
 
     public void launchThreads() {
         startGlobalThread();
+        this.threads = new Thread[getConfiguration().getNumThread()];
         for (int i = 0; i < getConfiguration().getNumThread(); i++) {
             Thread t = newThread(i);
+            threads[i] = t;
             Nd4j.getAffinityManager().attachThreadToDevice(t,
                             i % Nd4j.getAffinityManager().getNumberOfDevices());
             t.start();
-
         }
         log.info("Threads launched.");
     }
@@ -68,12 +71,14 @@ public abstract class AsyncLearning<O extends Encodable, A, AS extends ActionSpa
                 while (!isTrainingComplete() && getAsyncGlobal().isRunning()) {
 //                    getPolicy().play(getMdp(), getHistoryProcessor());
 //                    getDataManager().writeInfo(this);
-                    wait(20000);
+                    wait(2000);
                 }
+            }
+            for (Thread thread : threads) {
+                thread.interrupt();
             }
         } catch (Exception e) {
             log.error("Training failed.", e);
-            e.printStackTrace();
         }
     }
 

@@ -105,7 +105,6 @@ public abstract class AsyncThread<O extends Encodable, A, AS extends ActionSpace
         } catch (Exception e) {
             log.error("Thread crashed: " + e.getCause());
             getAsyncGlobal().setRunning(false);
-            e.printStackTrace();
         } finally {
             postEpoch();
         }
