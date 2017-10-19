@@ -8,6 +8,6 @@ package org.deeplearning4j.rl4j.network.ac;
  */
 public interface ActorCriticFactoryCompGraph {
 
-    IActorCritic buildActorCritic(int shapeInputs[], int numOutputs);
+    ActorCriticCompGraph buildActorCritic(int shapeInputs[], int numOutputs);
 
 }

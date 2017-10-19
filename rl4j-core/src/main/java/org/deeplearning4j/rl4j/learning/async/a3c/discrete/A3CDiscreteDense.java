@@ -17,7 +17,7 @@ import org.deeplearning4j.rl4j.util.DataManager;
  */
 public class A3CDiscreteDense<O extends Encodable> extends A3CDiscrete<O> {
 
-    public A3CDiscreteDense(MDP<O, Integer, DiscreteSpace> mdp, IActorCritic IActorCritic, A3CConfiguration conf,
+    public <NN extends IActorCritic<NN>> A3CDiscreteDense(MDP<O, Integer, DiscreteSpace> mdp, NN IActorCritic, A3CConfiguration conf,
                     DataManager dataManager) {
         super(mdp, IActorCritic, conf, dataManager);
     }

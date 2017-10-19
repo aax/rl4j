@@ -8,6 +8,6 @@ package org.deeplearning4j.rl4j.network.ac;
  */
 public interface ActorCriticFactorySeparate {
 
-    IActorCritic buildActorCritic(int shapeInputs[], int numOutputs);
+    ActorCriticSeparate buildActorCritic(int shapeInputs[], int numOutputs);
 
 }

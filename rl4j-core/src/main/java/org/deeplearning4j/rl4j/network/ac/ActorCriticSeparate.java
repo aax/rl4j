@@ -18,7 +18,7 @@ import java.util.Collection;
 /**
  * @author rubenfiszel (ruben.fiszel@epfl.ch) on 8/23/16.
  */
-public class ActorCriticSeparate<NN extends ActorCriticSeparate> implements IActorCritic<NN> {
+public class ActorCriticSeparate implements IActorCritic<ActorCriticSeparate> {
 
     final protected MultiLayerNetwork valueNet;
     final protected MultiLayerNetwork policyNet;
@@ -63,14 +63,14 @@ public class ActorCriticSeparate<NN extends ActorCriticSeparate> implements IAct
         }
     }
 
-    public NN clone() {
-        NN nn = (NN)new ActorCriticSeparate(valueNet.clone(), policyNet.clone());
+    public ActorCriticSeparate clone() {
+        ActorCriticSeparate nn = new ActorCriticSeparate(valueNet.clone(), policyNet.clone());
         nn.valueNet.setListeners(valueNet.getListeners());
         nn.policyNet.setListeners(policyNet.getListeners());
         return nn;
     }
 
-    public void copy(NN from) {
+    public void copy(ActorCriticSeparate from) {
         valueNet.setParams(from.valueNet.params());
         policyNet.setParams(from.policyNet.params());
     }
