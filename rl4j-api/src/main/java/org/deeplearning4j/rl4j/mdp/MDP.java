@@ -5,6 +5,8 @@ import org.deeplearning4j.gym.StepReply;
 import org.deeplearning4j.rl4j.space.ActionSpace;
 import org.deeplearning4j.rl4j.space.ObservationSpace;
 
+import java.util.Arrays;
+
 /**
  * @author rubenfiszel (ruben.fiszel@epfl.ch) 7/12/16.
  * An interface that ensure an environment is expressible as a
@@ -31,4 +33,9 @@ public interface MDP<O, A, AS extends ActionSpace<A>> {
 
     MDP<O, A, AS> newInstance();
 
+    default double[] actionWeights(O observation) {
+        double[] arr = new double[getActionSpace().getSize()];
+        Arrays.fill(arr, 1.0);
+        return arr;
+    }
 }

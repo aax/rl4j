@@ -74,7 +74,7 @@ public abstract class AsyncThreadDiscrete<O extends Encodable, NN extends Neural
                 action = lastAction;
             } else {
                 hstack = processHistory(input);
-                action = policy.nextAction(hstack);
+                action = policy.nextAction(hstack, getMdp().actionWeights(obs));
             }
 
             StepReply<O> stepReply = getMdp().step(action);

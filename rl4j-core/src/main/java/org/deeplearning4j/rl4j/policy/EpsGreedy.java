@@ -6,6 +6,7 @@ import org.deeplearning4j.rl4j.learning.StepCountable;
 import org.deeplearning4j.rl4j.mdp.MDP;
 import org.deeplearning4j.rl4j.network.NeuralNet;
 import org.deeplearning4j.rl4j.space.ActionSpace;
+import org.deeplearning4j.rl4j.space.DiscreteSpace;
 import org.deeplearning4j.rl4j.space.Encodable;
 import org.nd4j.linalg.api.ndarray.INDArray;
 
@@ -37,17 +38,29 @@ public class EpsGreedy<O extends Encodable, A, AS extends ActionSpace<A>> extend
         return policy.getNeuralNet();
     }
 
-    public A nextAction(INDArray input) {
+    public A nextAction(INDArray input, double[] actionWeights) {
 
         float ep = getEpsilon();
         if (learning.getStepCounter() % 500 == 1)
             log.info("EP: " + ep + " " + learning.getStepCounter());
         if (rd.nextFloat() > ep)
-            return policy.nextAction(input);
-        else
+            return policy.nextAction(input, actionWeights);
+        else if (mdp.getActionSpace() instanceof DiscreteSpace) {
+            return (A) getRandomValidDiscreteAction(actionWeights);
+        } else {
             return mdp.getActionSpace().randomAction();
+        }
 
 
+    }
+
+    private Integer getRandomValidDiscreteAction(double[] actionWeights) {
+        Integer action;
+        do {
+            DiscreteSpace actionSpace = (DiscreteSpace) mdp.getActionSpace();
+            action = actionSpace.randomAction();
+        } while(actionWeights[action] == 0.0);
+        return action;
     }
 
     public float getEpsilon() {

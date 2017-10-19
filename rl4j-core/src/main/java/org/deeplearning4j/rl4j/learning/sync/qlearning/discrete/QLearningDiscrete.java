@@ -137,7 +137,7 @@ public abstract class QLearningDiscrete<O extends Encodable> extends QLearning<O
             int maxAction = Learning.getMaxAction(qs);
 
             maxQ = qs.getDouble(maxAction);
-            action = getEgPolicy().nextAction(hstack);
+            action = getEgPolicy().nextAction(hstack, getMdp().actionWeights(obs));
         }
 
         lastAction = action;

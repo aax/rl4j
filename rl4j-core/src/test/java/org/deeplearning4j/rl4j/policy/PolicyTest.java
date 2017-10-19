@@ -116,18 +116,18 @@ public class PolicyTest {
 
         INDArray input = Nd4j.create(new double[] {1.0, 0.0});
         for (int i = 0; i < 100; i++) {
-            assertEquals(0, (int)policy.nextAction(input));
+            assertEquals(0, (int)policy.nextAction(input, new double[] {1.0, 1.0}));
         }
 
         input = Nd4j.create(new double[] {0.0, 1.0});
         for (int i = 0; i < 100; i++) {
-            assertEquals(1, (int)policy.nextAction(input));
+            assertEquals(1, (int)policy.nextAction(input, new double[] {1.0, 1.0}));
         }
 
         input = Nd4j.create(new double[] {0.1, 0.2, 0.3, 0.4});
         int[] count = new int[4];
         for (int i = 0; i < 100; i++) {
-            count[policy.nextAction(input)]++;
+            count[policy.nextAction(input, new double[] {1.0, 1.0, 1.0, 1.0})]++;
         }
         System.out.println(count[0] + " " + count[1] + " " + count[2] + " " + count[3]);
         assertTrue(count[0] < 20);

@@ -21,7 +21,7 @@ public abstract class Policy<O extends Encodable, A> {
 
     protected abstract NeuralNet getNeuralNet();
 
-    public abstract A nextAction(INDArray input);
+    public abstract A nextAction(INDArray input, double[] actionWeights);
 
     public <AS extends ActionSpace<A>> double play(MDP<O, A, AS> mdp) {
         return play(mdp, null);
@@ -72,7 +72,7 @@ public abstract class Policy<O extends Encodable, A> {
                     if (hstack.shape().length > 2)
                         hstack = hstack.reshape(Learning.makeShape(1, hstack.shape()));
                 }
-                action = nextAction(hstack);
+                action = nextAction(hstack, mdp.actionWeights(obs));
             }
             lastAction = action;
 

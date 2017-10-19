@@ -28,9 +28,9 @@ public class DQNPolicy<O extends Encodable> extends Policy<O, Integer> {
         return dqn;
     }
 
-    public Integer nextAction(INDArray input) {
+    public Integer nextAction(INDArray input, double[] actionWeights) {
         INDArray output = dqn.output(input);
-        return Learning.getMaxAction(output);
+        return Learning.getMaxAction(Learning.weighted(output, actionWeights));
     }
 
     public void save(String filename) throws IOException {

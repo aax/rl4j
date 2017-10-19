@@ -46,6 +46,10 @@ public abstract class Learning<O extends Encodable, A, AS extends ActionSpace<A>
         return Nd4j.argMax(vector, Integer.MAX_VALUE).getInt(0);
     }
 
+    public static INDArray weighted(INDArray vector, double[] weights) {
+        return vector.mul(Nd4j.create(weights));
+    }
+
     public static <O extends Encodable, A, AS extends ActionSpace<A>> INDArray getInput(MDP<O, A, AS> mdp, O obs) {
         INDArray arr = Nd4j.create(obs.toArray());
         int[] shape = mdp.getObservationSpace().getShape();

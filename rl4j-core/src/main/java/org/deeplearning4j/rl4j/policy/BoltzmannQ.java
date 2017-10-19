@@ -1,6 +1,7 @@
 package org.deeplearning4j.rl4j.policy;
 
 import lombok.AllArgsConstructor;
+import org.deeplearning4j.rl4j.learning.Learning;
 import org.deeplearning4j.rl4j.network.dqn.IDQN;
 import org.deeplearning4j.rl4j.space.Encodable;
 import org.nd4j.linalg.api.ndarray.INDArray;
@@ -25,9 +26,10 @@ public class BoltzmannQ<O extends Encodable> extends Policy<O, Integer> {
         return dqn;
     }
 
-    public Integer nextAction(INDArray input) {
+    public Integer nextAction(INDArray input, double[] actionWeights) {
 
         INDArray output = dqn.output(input);
+        output = Learning.weighted(output, actionWeights);
         INDArray exp = exp(output);
 
         double sum = exp.sum(1).getDouble(0);

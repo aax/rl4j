@@ -48,12 +48,14 @@ public class ACPolicy<O extends Encodable> extends Policy<O, Integer> {
         return IActorCritic;
     }
 
-    public Integer nextAction(INDArray input) {
+    public Integer nextAction(INDArray input, double[] actionWeights) {
         INDArray output = IActorCritic.outputAll(input)[1];
+        output = Learning.weighted(output, actionWeights);
         if (rd == null) {
             return Learning.getMaxAction(output);
         }
-        float rVal = rd.nextFloat();
+        float rVal = output.sumNumber().floatValue() * rd.nextFloat();
+
         for (int i = 0; i < output.length(); i++) {
             //System.out.println(i + " " + rVal + " " + output.getFloat(i));
             if (rVal < output.getFloat(i)) {
