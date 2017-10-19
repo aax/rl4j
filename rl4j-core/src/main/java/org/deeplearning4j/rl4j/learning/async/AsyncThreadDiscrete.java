@@ -62,7 +62,7 @@ public abstract class AsyncThreadDiscrete<O extends Encodable, NN extends Neural
         int i = 0;
         while (!getMdp().isDone() && i < nstep * skipFrame) {
 
-            INDArray input = Learning.getInput(getMdp(), obs);
+            INDArray input = Learning.getInput(obs, getMdp().getObservationSpace());
             INDArray hstack = null;
 
             if (hp != null) {
@@ -100,7 +100,7 @@ public abstract class AsyncThreadDiscrete<O extends Encodable, NN extends Neural
         }
 
         //a bit of a trick usable because of how the stack is treated to init R
-        INDArray input = Learning.getInput(getMdp(), obs);
+        INDArray input = Learning.getInput(obs, getMdp().getObservationSpace());
         INDArray hstack = processHistory(input);
 
         if (hp != null) {

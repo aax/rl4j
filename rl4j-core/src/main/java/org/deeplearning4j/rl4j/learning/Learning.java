@@ -9,6 +9,7 @@ import org.deeplearning4j.rl4j.mdp.MDP;
 import org.deeplearning4j.rl4j.network.NeuralNet;
 import org.deeplearning4j.rl4j.space.ActionSpace;
 import org.deeplearning4j.rl4j.space.Encodable;
+import org.deeplearning4j.rl4j.space.ObservationSpace;
 import org.deeplearning4j.rl4j.util.DataManager;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
@@ -50,9 +51,9 @@ public abstract class Learning<O extends Encodable, A, AS extends ActionSpace<A>
         return vector.mul(Nd4j.create(weights));
     }
 
-    public static <O extends Encodable, A, AS extends ActionSpace<A>> INDArray getInput(MDP<O, A, AS> mdp, O obs) {
+    public static <O extends Encodable> INDArray getInput(O obs, ObservationSpace<O> observationSpace) {
         INDArray arr = Nd4j.create(obs.toArray());
-        int[] shape = mdp.getObservationSpace().getShape();
+        int[] shape = observationSpace.getShape();
         if (shape.length == 1)
             return arr;
         else
@@ -75,7 +76,7 @@ public abstract class Learning<O extends Encodable, A, AS extends ActionSpace<A>
         int requiredFrame = isHistoryProcessor ? skipFrame * (hp.getConf().getHistoryLength() - 1) : 0;
 
         while (step < requiredFrame) {
-            INDArray input = Learning.getInput(mdp, obs);
+            INDArray input = getInput(obs, mdp.getObservationSpace());
 
             if (isHistoryProcessor)
                 hp.record(input);
@@ -133,7 +134,7 @@ public abstract class Learning<O extends Encodable, A, AS extends ActionSpace<A>
     }
 
     public INDArray getInput(O obs) {
-        return getInput(getMdp(), obs);
+        return getInput(obs, getMdp().getObservationSpace());
     }
 
     public InitMdp<O> initMdp() {
